@@ -100,6 +100,14 @@ public class TankFrame extends Frame {
         g.drawImage(offScreenImage, 0, 0, null);
     }
 
+    public List<Bullet> getBullets() {
+        return bullets;
+    }
+
+    public void setBullets(List<Bullet> bullets) {
+        this.bullets = bullets;
+    }
+
     class MyKeyListener extends KeyAdapter {
 
         boolean bL = false;

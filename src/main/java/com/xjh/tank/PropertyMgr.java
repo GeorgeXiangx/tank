@@ -9,7 +9,7 @@ import java.util.Properties;
  * @Email: xiangjunhong@newhope.cn
  */
 public class PropertyMgr {
-    static PropertyMgr propertyMgr;
+    private static PropertyMgr INSTANCE;
     static Properties properties = new Properties();
 
     static {
@@ -24,15 +24,11 @@ public class PropertyMgr {
 
     }
 
-    public PropertyMgr getInstance() {
-        synchronized (this) {
-            if (propertyMgr == null) {
-                synchronized (this) {
-                    return new PropertyMgr();
-                }
-            }
-            return propertyMgr;
+    public static PropertyMgr getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PropertyMgr();
         }
+        return INSTANCE;
     }
 
 
@@ -41,12 +37,12 @@ public class PropertyMgr {
         return properties.get(key);
     }
 
-    public static Object getInt(Object key) {
+    public static Integer getInt(Object key) {
         if (properties == null) return null;
         return Integer.parseInt((String) properties.get(key));
     }
 
-    public static Object getString(Object key) {
+    public static String getString(Object key) {
         if (properties == null) return null;
         return (String) properties.get(key);
     }

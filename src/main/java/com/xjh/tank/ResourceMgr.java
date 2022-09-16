@@ -11,6 +11,20 @@ import java.io.IOException;
  */
 public class ResourceMgr {
 
+    private static volatile ResourceMgr INSTANCE;
+
+    private ResourceMgr() {
+
+    }
+
+    public static ResourceMgr getInstance() {
+        return ResourceMgrHolder.INSTANCE;
+    }
+
+    private static class ResourceMgrHolder {
+        private static final ResourceMgr INSTANCE = new ResourceMgr();
+    }
+
     public static BufferedImage badTankL, badTankU, badTankR, badTankD;
     public static BufferedImage goodTankL, goodTankU, goodTankR, goodTankD;
     public static BufferedImage bulletL, bulletU, bulletR, bulletD;

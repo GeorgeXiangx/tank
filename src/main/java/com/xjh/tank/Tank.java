@@ -1,5 +1,9 @@
 package com.xjh.tank;
 
+import com.xjh.tank.dp.strategy.DefaultFireStrategy;
+import com.xjh.tank.dp.strategy.FireStrategy;
+import com.xjh.tank.dp.strategy.FourDirFireStrategy;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -11,16 +15,17 @@ import java.util.Random;
 public class Tank {
 
     private int x = 200, y = 200;
-    private Dir dir = Dir.DOWN;
+    public Dir dir = Dir.DOWN;
     private static final int SPEED = 5;
     private boolean isMoving = true;
-    private TankFrame tf = null;
+    public TankFrame tf = null;
     public static final int TANK_WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int TANK_HEIGHT = ResourceMgr.goodTankD.getHeight();
     private boolean living = true;
-    private Group group = Group.BAD;
+    public Group group = Group.BAD;
     private Random random = new Random();
     Rectangle rectangle = new Rectangle();
+    FireStrategy fs;
 
     public Tank(int x, int y, Dir dir, TankFrame tf, Group group) {
         this.x = x;
@@ -33,6 +38,17 @@ public class Tank {
         this.rectangle.y = this.y;
         this.rectangle.width = TANK_WIDTH;
         this.rectangle.height = TANK_HEIGHT;
+
+        if (group == Group.GOOD) {
+            try {
+                String goodTankFSName = PropertyMgr.getString("goodTankFS");
+                fs = (FireStrategy) Class.forName(goodTankFSName).newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            fs = new DefaultFireStrategy();
+        }
     }
 
     public void paint(Graphics g) {
@@ -106,10 +122,7 @@ public class Tank {
     }
 
     public void fire() {
-        // 计算子弹发射位置
-        int bX = this.x + TANK_WIDTH / 2 - Bullet.BULLET_WIDTH / 2;
-        int bY = this.y + TANK_HEIGHT / 2 - Bullet.BULLET_HEIGHT / 2;
-        this.tf.bullets.add(new Bullet(bX, bY, this.dir, this.tf, this.group));
+        fs.fire(this);
     }
 
     public void destroy() {
@@ -175,4 +188,5 @@ public class Tank {
     public void setDir(Dir dir) {
         this.dir = dir;
     }
+
 }

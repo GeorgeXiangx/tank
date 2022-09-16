@@ -3,3 +3,6 @@ tankSpeed=
 bulletSpeed=
 gameWith=
 gameHeight=
+#fire strategy
+goodTankFS=com.xjh.tank.dp.strategy.FourDirFireStrategy
+badTankFS=com.xjh.tank.dp.strategy.DefaultFireStrategy

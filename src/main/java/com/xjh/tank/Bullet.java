@@ -30,6 +30,8 @@ public class Bullet {
         this.rectangle.y = this.y;
         this.rectangle.width = BULLET_WIDTH;
         this.rectangle.height = BULLET_HEIGHT;
+
+        this.tf.bullets.add(this);
     }
 
     public void paint(Graphics g) {
