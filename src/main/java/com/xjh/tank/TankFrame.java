@@ -1,5 +1,7 @@
 package com.xjh.tank;
 
+import com.xjh.tank.dp.factory.*;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -18,13 +20,23 @@ public class TankFrame extends Frame {
     public static final int GAME_WIDTH = 1000;
     public static final int GAME_HEIGHT = 1000;
 
-    Tank myTank = new Tank(200, 200, Dir.DOWN, this, Group.GOOD);
+
     //    Bullet b = new Bullet(300, 300, Dir.DOWN);
-    List<Bullet> bullets = new ArrayList();
+//    List<Bullet> bullets = new ArrayList();
+    public List<BaseBullet> bullets = new ArrayList();
+
     //    Tank enemyTank = new Tank(200, 400, Dir.UP, this);
-    List<Tank> enemyTanks = new ArrayList<>();
+    public List<BaseTank> enemyTanks = new ArrayList<>();
+
     // Explode explode = new Explode(300, 300);
-    List<Explode> explodes = new ArrayList<>();
+//    public List<Explode> explodes = new ArrayList<>();
+    public List<BaseExplode> explodes = new ArrayList<>();
+
+    // 抽象工厂实现产品族的生产，实现换肤功能
+    public static GameFactory gf = new DefaultFactory();
+
+    //    Tank myTank = new Tank(200, 200, Dir.DOWN, this, Group.GOOD);
+    BaseTank myTank = gf.createTank(200, 200, Dir.DOWN, this, Group.GOOD);
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
@@ -100,11 +112,11 @@ public class TankFrame extends Frame {
         g.drawImage(offScreenImage, 0, 0, null);
     }
 
-    public List<Bullet> getBullets() {
+    public List<BaseBullet> getBullets() {
         return bullets;
     }
 
-    public void setBullets(List<Bullet> bullets) {
+    public void setBullets(List<BaseBullet> bullets) {
         this.bullets = bullets;
     }
 
@@ -136,7 +148,7 @@ public class TankFrame extends Frame {
             }
 
             setMainTankDir();
-            new Thread(()->new Audio("audio/tank_move.wav").play()).start();
+            new Thread(() -> new Audio("audio/tank_move.wav").play()).start();
         }
 
 

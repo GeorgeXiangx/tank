@@ -1,6 +1,7 @@
 package com.xjh.tank.dp.strategy;
 
 import com.xjh.tank.Tank;
+import com.xjh.tank.dp.factory.BaseTank;
 
 /**
  * @Author: XJH
@@ -9,5 +10,5 @@ import com.xjh.tank.Tank;
  */
 public interface FireStrategy {
 
-    void fire(Tank tank);
+    void fire(BaseTank tank);
 }

@@ -1,17 +1,15 @@
-package com.xjh.tank;
+package com.xjh.tank.dp.factory;
 
-import com.xjh.tank.dp.factory.BaseBullet;
-import com.xjh.tank.dp.factory.BaseTank;
+import com.xjh.tank.*;
 
 import java.awt.*;
 
 /**
  * @Author: XJH
- * @Date: 2022/9/13 3:22 下午
+ * @Date: 2022/9/20 10:18 上午
  * @Email: xiangjunhong@newhope.cn
  */
-public class Bullet extends BaseBullet {
-
+public class RectBullet extends BaseBullet {
     private static final int SPEED = 20;
     private int x, y;
     private Dir dir;
@@ -22,7 +20,7 @@ public class Bullet extends BaseBullet {
     private Group group = Group.BAD;
     Rectangle rectangle = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf, Group group) {
+    public RectBullet(int x, int y, Dir dir, TankFrame tf, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -43,24 +41,11 @@ public class Bullet extends BaseBullet {
         }
 
         // 这里颜色和移动是分开的
-//        final Color color = g.getColor();
-//        g.setColor(Color.RED);
-//        g.fillOval(x, y, WIDTH, HEIGHT);
-//        g.setColor(color);
-        switch (dir) {
-            case LEFT:
-                g.drawImage(ResourceMgr.bulletL, x, y, null);
-                break;
-            case UP:
-                g.drawImage(ResourceMgr.bulletU, x, y, null);
-                break;
-            case RIGHT:
-                g.drawImage(ResourceMgr.bulletR, x, y, null);
-                break;
-            case DOWN:
-                g.drawImage(ResourceMgr.bulletD, x, y, null);
-                break;
-        }
+        final Color color = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.fillRect(x, y, 20, 20);
+        g.setColor(color);
+
         move();
     }
 
@@ -120,4 +105,5 @@ public class Bullet extends BaseBullet {
     public void setGroup(Group group) {
         this.group = group;
     }
+
 }

@@ -1,34 +1,42 @@
-package com.xjh.tank;
+package com.xjh.tank.dp.factory;
 
-import com.xjh.tank.dp.factory.BaseExplode;
+import com.xjh.tank.Audio;
+import com.xjh.tank.ResourceMgr;
+import com.xjh.tank.TankFrame;
 
 import java.awt.*;
 
 /**
  * @Author: XJH
- * @Date: 2022/9/13 3:22 下午
+ * @Date: 2022/9/20 10:18 上午
  * @Email: xiangjunhong@newhope.cn
  */
-public class Explode extends BaseExplode {
+public class RectExplode extends BaseExplode {
+
     public static int EXPLODE_WIDTH = ResourceMgr.explodes[0].getWidth();
     public static int EXPLODE_HEIGHT = ResourceMgr.explodes[0].getHeight();
     private int x, y;
     private TankFrame tf;
     int step = 0;
 
-    public Explode(int x, int y, TankFrame tf) {
+    public RectExplode(int x, int y, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.tf = tf;
         new Thread(() -> new Audio("audio/explode.wav").play()).start();
     }
 
+    @Override
     public void paint(Graphics g) {
-        g.drawImage(ResourceMgr.explodes[step++], x, y, null);
+        final Color color = g.getColor();
+        g.setColor(Color.PINK);
+        g.fillRect(x, y, step * 10, step * 10);
+        step++;
+
         if (step >= ResourceMgr.explodes.length) {
-//            step = 0;
             tf.explodes.remove(this);
         }
-    }
 
+        g.setColor(color);
+    }
 }

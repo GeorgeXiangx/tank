@@ -1,28 +1,26 @@
-package com.xjh.tank;
+package com.xjh.tank.dp.factory;
 
-import com.xjh.tank.dp.factory.BaseTank;
-import com.xjh.tank.dp.factory.GameFactory;
+import com.xjh.tank.*;
 import com.xjh.tank.dp.strategy.DefaultFireStrategy;
 import com.xjh.tank.dp.strategy.FireStrategy;
-import com.xjh.tank.dp.strategy.FourDirFireStrategy;
 
 import java.awt.*;
 import java.util.Random;
 
 /**
  * @Author: XJH
- * @Date: 2022/9/13 2:26 下午
+ * @Date: 2022/9/20 10:17 上午
  * @Email: xiangjunhong@newhope.cn
  */
-public class Tank extends BaseTank {
+public class RectTank extends BaseTank {
     private static final int SPEED = 5;
     public static final int TANK_WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int TANK_HEIGHT = ResourceMgr.goodTankD.getHeight();
-    private boolean living = true;
     private Random random = new Random();
+
     FireStrategy fs;
 
-    public Tank(int x, int y, Dir dir, TankFrame tf, Group group) {
+    public RectTank(int x, int y, Dir dir, TankFrame tf, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -51,24 +49,10 @@ public class Tank extends BaseTank {
             tf.enemyTanks.remove(this);
         }
 
-//        final Color color = g.getColor();
-//        g.setColor(Color.YELLOW);
-//        g.fillRect(x, y, 50, 50);
-//        g.setColor(color);
-        switch (dir) {
-            case LEFT:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
-                break;
-            case UP:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankU : ResourceMgr.badTankU, x, y, null);
-                break;
-            case RIGHT:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankR : ResourceMgr.badTankR, x, y, null);
-                break;
-            case DOWN:
-                g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankD : ResourceMgr.badTankD, x, y, null);
-                break;
-        }
+        final Color color = g.getColor();
+        g.setColor(Group.GOOD == this.group ? Color.WHITE : Color.GREEN);
+        g.fillRect(x, y, 50, 50);
+        g.setColor(color);
 
         move();
     }
