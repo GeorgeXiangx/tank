@@ -2,8 +2,6 @@ package com.xjh.tank;
 
 import com.xjh.tank.dp.strategy.DefaultFireStrategy;
 import com.xjh.tank.dp.strategy.FireStrategy;
-import com.xjh.tank.dp.strategy.FourDirFireStrategy;
-
 import java.awt.*;
 import java.util.Random;
 
@@ -18,7 +16,7 @@ public class Tank {
     public Dir dir = Dir.DOWN;
     private static final int SPEED = 5;
     private boolean isMoving = true;
-    public TankFrame tf = null;
+    public GameModel gm = null;
     public static final int TANK_WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int TANK_HEIGHT = ResourceMgr.goodTankD.getHeight();
     private boolean living = true;
@@ -27,11 +25,11 @@ public class Tank {
     Rectangle rectangle = new Rectangle();
     FireStrategy fs;
 
-    public Tank(int x, int y, Dir dir, TankFrame tf, Group group) {
+    public Tank(int x, int y, Dir dir, GameModel gm, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf = tf;
+        this.gm = gm;
         this.group = group;
 
         this.rectangle.x = this.x;
@@ -53,7 +51,7 @@ public class Tank {
 
     public void paint(Graphics g) {
         if (!living) {
-            tf.enemyTanks.remove(this);
+            gm.enemyTanks.remove(this);
         }
 
 //        final Color color = g.getColor();
@@ -113,8 +111,8 @@ public class Tank {
     private void boundsCheck() {
         if (this.x < 2) x = 2;
         if (this.y < 28) y = 28;
-        if (this.x > TankFrame.GAME_WIDTH - Tank.TANK_WIDTH - 2) x = TankFrame.GAME_WIDTH - Tank.TANK_WIDTH - 2;
-        if (this.y > TankFrame.GAME_HEIGHT - Tank.TANK_HEIGHT - 2) y = TankFrame.GAME_HEIGHT - Tank.TANK_HEIGHT - 2;
+        if (this.x > GameModel.GAME_WIDTH - Tank.TANK_WIDTH - 2) x = GameModel.GAME_WIDTH - Tank.TANK_WIDTH - 2;
+        if (this.y > GameModel.GAME_HEIGHT - Tank.TANK_HEIGHT - 2) y = GameModel.GAME_HEIGHT - Tank.TANK_HEIGHT - 2;
     }
 
     private void randomDir() {
@@ -130,15 +128,7 @@ public class Tank {
 
         int eX = this.x + TANK_WIDTH / 2 - Explode.EXPLODE_WIDTH / 2;
         int eY = this.y + TANK_HEIGHT / 2 - Explode.EXPLODE_HEIGHT / 2;
-        tf.explodes.add(new Explode(eX, eY, this.tf));
-    }
-
-    public TankFrame getTf() {
-        return tf;
-    }
-
-    public void setTf(TankFrame tf) {
-        this.tf = tf;
+        gm.explodes.add(new Explode(eX, eY, gm));
     }
 
     public int getX() {

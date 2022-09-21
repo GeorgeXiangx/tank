@@ -14,16 +14,16 @@ public class Bullet {
     private Dir dir;
     public static final int BULLET_WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int BULLET_HEIGHT = ResourceMgr.bulletD.getHeight();
-    private TankFrame tf = null;
+    private GameModel gm = null;
     private boolean living = true;
     private Group group = Group.BAD;
     Rectangle rectangle = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf, Group group) {
+    public Bullet(int x, int y, Dir dir, GameModel gm, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf = tf;
+        this.gm = gm;
         this.group = group;
 
         this.rectangle.x = this.x;
@@ -31,12 +31,12 @@ public class Bullet {
         this.rectangle.width = BULLET_WIDTH;
         this.rectangle.height = BULLET_HEIGHT;
 
-        this.tf.bullets.add(this);
+        this.gm.bullets.add(this);
     }
 
     public void paint(Graphics g) {
         if (!living) {
-            tf.bullets.remove(this);
+            gm.bullets.remove(this);
         }
 
         // 这里颜色和移动是分开的
@@ -79,7 +79,7 @@ public class Bullet {
                 break;
         }
 
-        if (x < 0 || y < 0 || x > tf.GAME_WIDTH || y > tf.GAME_HEIGHT) {
+        if (x < 0 || y < 0 || x > gm.GAME_WIDTH || y > gm.GAME_HEIGHT) {
             living = false;
         }
 
