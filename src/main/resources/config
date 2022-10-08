@@ -7,4 +7,4 @@ gameHeight=
 goodTankFS=com.xjh.tank.dp.strategy.FourDirFireStrategy
 badTankFS=com.xjh.tank.dp.strategy.DefaultFireStrategy
 #colliders
-colliders=com.xjh.tank.dp.cor.BulletTankCollider,com.xjh.tank.dp.cor.TankTankCollider
+colliders=com.xjh.tank.dp.cor.BulletTankCollider,com.xjh.tank.dp.cor.TankTankCollider,com.xjh.tank.dp.cor.TankWallCollider,com.xjh.tank.dp.cor.BulletWallCollider
