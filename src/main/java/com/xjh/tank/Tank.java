@@ -2,6 +2,7 @@ package com.xjh.tank;
 
 import com.xjh.tank.dp.strategy.DefaultFireStrategy;
 import com.xjh.tank.dp.strategy.FireStrategy;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -10,9 +11,8 @@ import java.util.Random;
  * @Date: 2022/9/13 2:26 下午
  * @Email: xiangjunhong@newhope.cn
  */
-public class Tank {
+public class Tank extends GameObject {
 
-    private int x = 200, y = 200;
     public Dir dir = Dir.DOWN;
     private static final int SPEED = 5;
     private boolean isMoving = true;
@@ -24,6 +24,7 @@ public class Tank {
     private Random random = new Random();
     Rectangle rectangle = new Rectangle();
     FireStrategy fs;
+    private int preX, preY;
 
     public Tank(int x, int y, Dir dir, GameModel gm, Group group) {
         this.x = x;
@@ -51,7 +52,7 @@ public class Tank {
 
     public void paint(Graphics g) {
         if (!living) {
-            gm.enemyTanks.remove(this);
+            gm.objects.remove(this);
         }
 
 //        final Color color = g.getColor();
@@ -80,6 +81,9 @@ public class Tank {
         if (!isMoving) {
             return;
         }
+
+        preX = x;
+        preY = y;
 
         switch (dir) {
             case LEFT:
@@ -128,7 +132,16 @@ public class Tank {
 
         int eX = this.x + TANK_WIDTH / 2 - Explode.EXPLODE_WIDTH / 2;
         int eY = this.y + TANK_HEIGHT / 2 - Explode.EXPLODE_HEIGHT / 2;
-        gm.explodes.add(new Explode(eX, eY, gm));
+        gm.objects.add(new Explode(eX, eY, gm));
+    }
+
+    public void stop() {
+        isMoving = false;
+    }
+
+    public void restoreLocation() {
+        x = preX;
+        y = preY;
     }
 
     public int getX() {
@@ -179,4 +192,27 @@ public class Tank {
         this.dir = dir;
     }
 
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
+    }
+
+    public int getPreX() {
+        return preX;
+    }
+
+    public void setPreX(int preX) {
+        this.preX = preX;
+    }
+
+    public int getPreY() {
+        return preY;
+    }
+
+    public void setPreY(int preY) {
+        this.preY = preY;
+    }
 }

@@ -7,10 +7,9 @@ import java.awt.*;
  * @Date: 2022/9/13 3:22 下午
  * @Email: xiangjunhong@newhope.cn
  */
-public class Explode {
+public class Explode extends GameObject{
     public static int EXPLODE_WIDTH = ResourceMgr.explodes[0].getWidth();
     public static int EXPLODE_HEIGHT = ResourceMgr.explodes[0].getHeight();
-    private int x, y;
     private GameModel gm;
     int step = 0;
 
@@ -25,7 +24,7 @@ public class Explode {
         g.drawImage(ResourceMgr.explodes[step++], x, y, null);
         if (step >= ResourceMgr.explodes.length) {
 //            step = 0;
-            gm.explodes.remove(this);
+            gm.objects.remove(this);
         }
     }
 

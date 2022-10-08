@@ -7,10 +7,9 @@ import java.awt.*;
  * @Date: 2022/9/13 3:22 下午
  * @Email: xiangjunhong@newhope.cn
  */
-public class Bullet {
+public class Bullet extends GameObject {
 
     private static final int SPEED = 20;
-    private int x, y;
     private Dir dir;
     public static final int BULLET_WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int BULLET_HEIGHT = ResourceMgr.bulletD.getHeight();
@@ -31,12 +30,12 @@ public class Bullet {
         this.rectangle.width = BULLET_WIDTH;
         this.rectangle.height = BULLET_HEIGHT;
 
-        this.gm.bullets.add(this);
+        this.gm.objects.add(this);
     }
 
     public void paint(Graphics g) {
         if (!living) {
-            gm.bullets.remove(this);
+            gm.objects.remove(this);
         }
 
         // 这里颜色和移动是分开的
@@ -87,18 +86,18 @@ public class Bullet {
         this.rectangle.y = y;
     }
 
-    public void collideWith(Tank tank) {
-        if (this.group == tank.getGroup()) return;
-//        Rectangle rectangle = new Rectangle(x, y, BULLET_WIDTH, BULLET_HEIGHT);
-//        Rectangle rectangle2 = new Rectangle(tank.getX(), tank.getY(), Tank.TANK_WIDTH, Tank.TANK_HEIGHT);
+//    public void collideWith(Tank tank) {
+//        if (this.group == tank.getGroup()) return;
+////        Rectangle rectangle = new Rectangle(x, y, BULLET_WIDTH, BULLET_HEIGHT);
+////        Rectangle rectangle2 = new Rectangle(tank.getX(), tank.getY(), Tank.TANK_WIDTH, Tank.TANK_HEIGHT);
+//
+//        if (rectangle.intersects(tank.rectangle)) {
+//            this.destroy();
+//            tank.destroy();
+//        }
+//    }
 
-        if (rectangle.intersects(tank.rectangle)) {
-            this.destroy();
-            tank.destroy();
-        }
-    }
-
-    private void destroy() {
+    public void destroy() {
         this.living = false;
     }
 
@@ -116,5 +115,13 @@ public class Bullet {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public Rectangle getRectangle() {
+        return rectangle;
+    }
+
+    public void setRectangle(Rectangle rectangle) {
+        this.rectangle = rectangle;
     }
 }
