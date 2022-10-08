@@ -19,6 +19,6 @@ public class DefaultFireStrategy implements FireStrategy {
         // 计算子弹发射位置
         int bX = tank.getX() + TANK_WIDTH / 2 - Bullet.BULLET_WIDTH / 2;
         int bY = tank.getY() + TANK_HEIGHT / 2 - Bullet.BULLET_HEIGHT / 2;
-        new Bullet(bX, bY, tank.dir, tank.gm, tank.group);
+        new Bullet(bX, bY, tank.dir, tank.group);
     }
 }

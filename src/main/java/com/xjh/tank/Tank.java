@@ -16,7 +16,6 @@ public class Tank extends GameObject {
     public Dir dir = Dir.DOWN;
     private static final int SPEED = 5;
     private boolean isMoving = true;
-    public GameModel gm = null;
     public static final int TANK_WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int TANK_HEIGHT = ResourceMgr.goodTankD.getHeight();
     private boolean living = true;
@@ -26,11 +25,10 @@ public class Tank extends GameObject {
     FireStrategy fs;
     private int preX, preY;
 
-    public Tank(int x, int y, Dir dir, GameModel gm, Group group) {
+    public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.gm = gm;
         this.group = group;
 
         this.rectangle.x = this.x;
@@ -48,11 +46,13 @@ public class Tank extends GameObject {
         } else {
             fs = new DefaultFireStrategy();
         }
+
+        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g) {
         if (!living) {
-            gm.objects.remove(this);
+            GameModel.getInstance().remove(this);
         }
 
 //        final Color color = g.getColor();
@@ -129,10 +129,6 @@ public class Tank extends GameObject {
 
     public void destroy() {
         living = false;
-
-        int eX = this.x + TANK_WIDTH / 2 - Explode.EXPLODE_WIDTH / 2;
-        int eY = this.y + TANK_HEIGHT / 2 - Explode.EXPLODE_HEIGHT / 2;
-        gm.objects.add(new Explode(eX, eY, gm));
     }
 
     public void stop() {

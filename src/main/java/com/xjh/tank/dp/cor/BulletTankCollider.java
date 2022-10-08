@@ -1,8 +1,6 @@
 package com.xjh.tank.dp.cor;
 
-import com.xjh.tank.Bullet;
-import com.xjh.tank.GameObject;
-import com.xjh.tank.Tank;
+import com.xjh.tank.*;
 
 /**
  * @Author: XJH
@@ -21,6 +19,11 @@ public class BulletTankCollider implements Collider {
             if (bullet.getRectangle().intersects(tank.getRectangle())) {
                 bullet.destroy();
                 tank.destroy();
+
+                int eX = tank.getX() + Tank.TANK_WIDTH / 2 - Explode.EXPLODE_WIDTH / 2;
+                int eY = tank.getY() + Tank.TANK_HEIGHT / 2 - Explode.EXPLODE_HEIGHT / 2;
+                new Explode(eX, eY);
+
                 return false;
             }
         } else if (o1 instanceof Tank && o2 instanceof Bullet) {

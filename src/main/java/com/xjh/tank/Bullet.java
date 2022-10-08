@@ -13,16 +13,14 @@ public class Bullet extends GameObject {
     private Dir dir;
     public static final int BULLET_WIDTH = ResourceMgr.bulletD.getWidth();
     public static final int BULLET_HEIGHT = ResourceMgr.bulletD.getHeight();
-    private GameModel gm = null;
     private boolean living = true;
     private Group group = Group.BAD;
     Rectangle rectangle = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir, GameModel gm, Group group) {
+    public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.gm = gm;
         this.group = group;
 
         this.rectangle.x = this.x;
@@ -30,12 +28,12 @@ public class Bullet extends GameObject {
         this.rectangle.width = BULLET_WIDTH;
         this.rectangle.height = BULLET_HEIGHT;
 
-        this.gm.objects.add(this);
+        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g) {
         if (!living) {
-            gm.objects.remove(this);
+            GameModel.getInstance().remove(this);
         }
 
         // 这里颜色和移动是分开的
@@ -78,7 +76,7 @@ public class Bullet extends GameObject {
                 break;
         }
 
-        if (x < 0 || y < 0 || x > gm.GAME_WIDTH || y > gm.GAME_HEIGHT) {
+        if (x < 0 || y < 0 || x > GameModel.GAME_WIDTH || y > GameModel.GAME_HEIGHT) {
             living = false;
         }
 

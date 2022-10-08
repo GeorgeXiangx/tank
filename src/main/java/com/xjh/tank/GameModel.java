@@ -1,9 +1,6 @@
 package com.xjh.tank;
 
-import com.xjh.tank.dp.cor.BulletTankCollider;
-import com.xjh.tank.dp.cor.Collider;
 import com.xjh.tank.dp.cor.ColliderChain;
-import com.xjh.tank.dp.cor.TankTankCollider;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -16,10 +13,15 @@ import java.util.List;
  */
 public class GameModel {
 
+    public static final GameModel INSTANCE = new GameModel();
     public static final int GAME_WIDTH = 1000;
     public static final int GAME_HEIGHT = 1000;
 
-    Tank myTank = new Tank(200, 200, Dir.DOWN, this, Group.GOOD);
+    static {
+        INSTANCE.init();
+    }
+
+    Tank myTank;
 //    //    Bullet b = new Bullet(300, 300, Dir.DOWN);
 //    List<Bullet> bullets = new ArrayList();
 //    //    Tank enemyTank = new Tank(200, 400, Dir.UP, this);
@@ -32,14 +34,23 @@ public class GameModel {
 //    Collider collider2 = new TankTankCollider();
     ColliderChain colliderChain = new ColliderChain();
 
-    public GameModel() {
+    private GameModel() {
+
+    }
+
+    private void init() {
         int initTankCount = Integer.parseInt((String) PropertyMgr.get("initTankCount"));
 
         for (int i = 0; i < initTankCount; i++) {
-            objects.add(new Tank(100 * i, 300, Dir.UP, this, Group.BAD));
+            new Tank(100 * i, 300, Dir.UP, Group.BAD);
         }
+        myTank = new Tank(200, 200, Dir.DOWN, Group.GOOD);
 
-        objects.add(new Wall(100, 400, 300, 50));
+        new Wall(100, 400, 300, 50);
+    }
+
+    public static GameModel getInstance() {
+        return INSTANCE;
     }
 
     public void paint(Graphics g) {

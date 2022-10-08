@@ -18,6 +18,8 @@ public class Wall extends GameObject {
         this.w = w;
         this.h = h;
         this.rectangle = new Rectangle(x, y, w, h);
+
+        GameModel.getInstance().add(this);
     }
 
     @Override

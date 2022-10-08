@@ -5,6 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import static com.xjh.tank.GameModel.GAME_HEIGHT;
 import static com.xjh.tank.GameModel.GAME_WIDTH;
 
@@ -15,7 +16,7 @@ import static com.xjh.tank.GameModel.GAME_WIDTH;
  */
 public class TankFrame extends Frame {
 
-    GameModel gm = new GameModel();
+    GameModel gm = GameModel.getInstance();
 
     public TankFrame() {
         setSize(GAME_WIDTH, GAME_HEIGHT);
