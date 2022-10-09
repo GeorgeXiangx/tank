@@ -211,4 +211,14 @@ public class Tank extends GameObject {
     public void setPreY(int preY) {
         this.preY = preY;
     }
+
+    @Override
+    public int getWidth() {
+        return TANK_WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return TANK_HEIGHT;
+    }
 }

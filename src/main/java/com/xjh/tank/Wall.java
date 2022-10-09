@@ -37,4 +37,14 @@ public class Wall extends GameObject {
     public void setRectangle(Rectangle rectangle) {
         this.rectangle = rectangle;
     }
+
+    @Override
+    public int getWidth() {
+        return w;
+    }
+
+    @Override
+    public int getHeight() {
+        return h;
+    }
 }

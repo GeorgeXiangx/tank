@@ -2,8 +2,6 @@ package com.xjh.tank.dp.cor;
 
 import com.xjh.tank.GameObject;
 import com.xjh.tank.PropertyMgr;
-import com.xjh.tank.dp.strategy.FireStrategy;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;

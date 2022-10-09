@@ -122,4 +122,14 @@ public class Bullet extends GameObject {
     public void setRectangle(Rectangle rectangle) {
         this.rectangle = rectangle;
     }
+
+    @Override
+    public int getWidth() {
+        return BULLET_WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return BULLET_HEIGHT;
+    }
 }
