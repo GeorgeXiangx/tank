@@ -108,7 +108,9 @@ public class TankFrame extends Frame {
                     break;
                 // 按键抬起时发射子弹
                 case KeyEvent.VK_SPACE:
-                    myTank.fire();
+//                    myTank.fire();
+                    // observer pattern
+                    myTank.handleFireKey();
                     break;
                 default:
                     break;

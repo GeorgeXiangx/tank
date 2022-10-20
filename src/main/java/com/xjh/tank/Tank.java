@@ -1,10 +1,15 @@
 package com.xjh.tank;
 
+import com.xjh.tank.dp.observer.TankFireEvent;
+import com.xjh.tank.dp.observer.TankFireHandler;
+import com.xjh.tank.dp.observer.TankFireObserver;
 import com.xjh.tank.dp.strategy.DefaultFireStrategy;
 import com.xjh.tank.dp.strategy.FireStrategy;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.List;
 
 /**
  * @Author: XJH
@@ -139,6 +144,16 @@ public class Tank extends GameObject {
         x = preX;
         y = preY;
     }
+
+    private List<TankFireObserver> observers = Arrays.asList(new TankFireHandler());
+
+    public void handleFireKey() {
+        final TankFireEvent tankFireEvent = new TankFireEvent(this);
+        for (TankFireObserver observer : observers) {
+            observer.actionOnFire(tankFireEvent);
+        }
+    }
+
 
     public int getX() {
         return x;
