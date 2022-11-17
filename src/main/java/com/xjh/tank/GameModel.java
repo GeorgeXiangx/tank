@@ -3,6 +3,7 @@ package com.xjh.tank;
 import com.xjh.tank.dp.cor.ColliderChain;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,5 +115,29 @@ public class GameModel {
 
     public Tank getMainTank() {
         return myTank;
+    }
+
+    public void save() {
+        File file = new File("/Users/admin/common/data/tank.data");
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(myTank);
+            oos.writeObject(objects);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void load() {
+        File file = new File("/Users/admin/common/data/tank.data");
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            myTank = (Tank) ois.readObject();
+            objects = (List) ois.readObject();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
