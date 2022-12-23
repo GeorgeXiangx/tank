@@ -1,9 +1,6 @@
 package com.xjh.tank;
 
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import com.xjh.tank.net.Client;
 
 /**
  * @Author: XJH
@@ -14,18 +11,28 @@ public class Main {
 
     public static void main(String[] args) throws InterruptedException {
 //        final Frame frame = new Frame();
-        final TankFrame tankFrame = new TankFrame();
-        int initTankCount = Integer.parseInt((String) PropertyMgr.get("initTankCount"));
+        final TankFrame tankFrame = TankFrame.INSTANCE;
+        tankFrame.setVisible(true);
 
-        for (int i = 0; i < initTankCount; i++) {
-            tankFrame.enemyTanks.add(new Tank(200 * i, 400, Dir.UP, tankFrame, Group.BAD));
-        }
+//        // 初始化敌方坦克
+//        int initTankCount = Integer.parseInt((String) PropertyMgr.get("initTankCount"));
+//        for (int i = 0; i < initTankCount; i++) {
+//            tankFrame.enemyTanks.add(new Tank(200 * i, 400, Dir.UP, tankFrame, Group.BAD));
+//        }
 
         new Thread(() -> new Audio("audio/war1.wav").loop()).start();
 
-        while (true) {
-            Thread.sleep(25);
-            tankFrame.repaint();
-        }
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                tankFrame.repaint();
+            }
+        }).start();
+
+        Client.INSTANCE.connect();
     }
 }

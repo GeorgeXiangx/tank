@@ -5,8 +5,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -15,15 +14,16 @@ import java.util.List;
  * @Email: xiangjunhong@newhope.cn
  */
 public class TankFrame extends Frame {
+
+    public final static TankFrame INSTANCE = new TankFrame();
+    Map<UUID, Tank> tanks = new HashMap<>();
     public static final int GAME_WIDTH = 1000;
     public static final int GAME_HEIGHT = 1000;
+    Random r = new Random();
 
-    Tank myTank = new Tank(200, 200, Dir.DOWN, this, Group.GOOD);
-    //    Bullet b = new Bullet(300, 300, Dir.DOWN);
+    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), Dir.DOWN, this, Group.GOOD);
     List<Bullet> bullets = new ArrayList();
-    //    Tank enemyTank = new Tank(200, 400, Dir.UP, this);
     List<Tank> enemyTanks = new ArrayList<>();
-    // Explode explode = new Explode(300, 300);
     List<Explode> explodes = new ArrayList<>();
 
     public TankFrame() {
@@ -48,27 +48,18 @@ public class TankFrame extends Frame {
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量:" + bullets.size(), 10, 60);
         g.drawString("敌人坦克的数量:" + enemyTanks.size(), 10, 80);
-        g.drawString("爆炸的数量:" + enemyTanks.size(), 10, 100);
+        g.drawString("爆炸的数量:" + explodes.size(), 10, 100);
         g.setColor(color);
 
+        // 画自己的tank
         myTank.paint(g);
-//        b.paint(g);
-
+        // 画子弹
         for (int i = 0; i < bullets.size(); i++) {
             bullets.get(i).paint(g);
         }
 
-//        for (Iterator<Bullet> it = bullets.iterator(); it.hasNext(); ) {
-//            final Bullet bullet = it.next();
-//            if (!bullet.isLive()) {
-//                it.remove();
-//            }
-//        }
-//        if (enemyTank != null) enemyTank.paint(g);
-
-        for (int i = 0; i < enemyTanks.size(); i++) {
-            enemyTanks.get(i).paint(g);
-        }
+        // 画其他客户端的tank
+        tanks.values().stream().forEach(t -> t.paint(g));
 
         // 碰撞检测
         for (int i = 0; i < enemyTanks.size(); i++) {
@@ -80,7 +71,6 @@ public class TankFrame extends Frame {
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).paint(g);
         }
-//        explode.paint(g);
     }
 
     // 双缓存解决画面闪烁问题
@@ -98,6 +88,18 @@ public class TankFrame extends Frame {
         graphics.setColor(color);
         paint(graphics);
         g.drawImage(offScreenImage, 0, 0, null);
+    }
+
+    public Tank getMyTank() {
+        return myTank;
+    }
+
+    public void addTank(Tank t) {
+        tanks.put(t.getId(), t);
+    }
+
+    public Tank getTankByUUID(UUID id) {
+        return tanks.get(id);
     }
 
     class MyKeyListener extends KeyAdapter {
@@ -128,7 +130,7 @@ public class TankFrame extends Frame {
             }
 
             setMainTankDir();
-            new Thread(()->new Audio("audio/tank_move.wav").play()).start();
+            new Thread(() -> new Audio("audio/tank_move.wav").play()).start();
         }
 
 

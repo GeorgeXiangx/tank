@@ -1,7 +1,10 @@
 package com.xjh.tank;
 
+import com.xjh.tank.net.TankJoinMsg;
+
 import java.awt.*;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @Author: XJH
@@ -13,7 +16,7 @@ public class Tank {
     private int x = 200, y = 200;
     private Dir dir = Dir.DOWN;
     private static final int SPEED = 5;
-    private boolean isMoving = true;
+    private boolean isMoving = false;
     private TankFrame tf = null;
     public static final int TANK_WIDTH = ResourceMgr.goodTankD.getWidth();
     public static final int TANK_HEIGHT = ResourceMgr.goodTankD.getHeight();
@@ -21,6 +24,7 @@ public class Tank {
     private Group group = Group.BAD;
     private Random random = new Random();
     Rectangle rectangle = new Rectangle();
+    private UUID id = UUID.randomUUID();
 
     public Tank(int x, int y, Dir dir, TankFrame tf, Group group) {
         this.x = x;
@@ -35,15 +39,31 @@ public class Tank {
         this.rectangle.height = TANK_HEIGHT;
     }
 
+    public Tank(TankJoinMsg tankJoinMsg) {
+        this.x = tankJoinMsg.x;
+        this.y = tankJoinMsg.y;
+        this.dir = tankJoinMsg.getDir();
+        this.isMoving = tankJoinMsg.isMoving();
+        this.group = tankJoinMsg.getGroup();
+        this.id = tankJoinMsg.getId();
+
+        this.rectangle.x = this.x;
+        this.rectangle.y = this.y;
+        this.rectangle.width = TANK_WIDTH;
+        this.rectangle.height = TANK_HEIGHT;
+    }
+
     public void paint(Graphics g) {
         if (!living) {
             tf.enemyTanks.remove(this);
         }
 
-//        final Color color = g.getColor();
-//        g.setColor(Color.YELLOW);
-//        g.fillRect(x, y, 50, 50);
-//        g.setColor(color);
+        // uuid on head
+        final Color color = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawString(id.toString(), this.x, this.y - 10);
+        g.setColor(color);
+
         switch (dir) {
             case LEFT:
                 g.drawImage(this.group == Group.GOOD ? ResourceMgr.goodTankL : ResourceMgr.badTankL, x, y, null);
@@ -162,6 +182,10 @@ public class Tank {
 
     public boolean isMoving() {
         return isMoving;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public void setMoving(boolean moving) {
