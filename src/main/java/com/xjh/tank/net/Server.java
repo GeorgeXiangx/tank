@@ -1,5 +1,6 @@
 package com.xjh.tank.net;
 
+import com.xjh.tank.util.DateUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
@@ -64,6 +65,7 @@ class ServerChildHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         // 更新ServerFrame界面文字消息
         ServerFrame.INSTANCE.updateClientMsg(msg.toString());
+        System.out.println(DateUtils.getDateTimeNow() + " Server开始转发消息 ： " + msg);
         // Server收到消息后直接转发给所有client
         Server.clients.writeAndFlush(msg);
 

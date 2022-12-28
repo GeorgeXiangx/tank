@@ -1,6 +1,6 @@
 package com.xjh.tank;
 
-import com.xjh.tank.net.TankJoinMsg;
+import com.xjh.tank.net.msg.TankJoinMsg;
 
 import java.awt.*;
 import java.util.Random;
@@ -51,6 +51,18 @@ public class Tank {
         this.rectangle.y = this.y;
         this.rectangle.width = TANK_WIDTH;
         this.rectangle.height = TANK_HEIGHT;
+    }
+
+    @Override
+    public String toString() {
+        return "Tank{" +
+                "x=" + x +
+                ", y=" + y +
+                ", dir=" + dir +
+                ", isMoving=" + isMoving +
+                ", group=" + group +
+                ", id=" + id +
+                '}';
     }
 
     public void paint(Graphics g) {

@@ -1,4 +1,6 @@
-package com.xjh.tank.net;
+package com.xjh.tank.net.msg;
+
+import com.xjh.tank.net.MsgType;
 
 /**
  * @Author: XJH
@@ -10,4 +12,8 @@ public abstract class Msg {
     public abstract byte[] toBytes();
 
     public abstract void handle();
+
+    public abstract MsgType getMsgType();
+
+    public abstract void parse(byte[] bytes);
 }

@@ -2,11 +2,14 @@ package com.xjh.tank.net;
 
 import com.xjh.tank.Dir;
 import com.xjh.tank.Group;
+import com.xjh.tank.net.msg.TankJoinMsg;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.embedded.EmbeddedChannel;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
@@ -32,6 +35,15 @@ public class MsgCodecTest {
         // 出站,entity -> bytes    encode序列化
         final ByteBuf buf = (ByteBuf) ch.readOutbound();
 
+        // 类型
+        MsgType msgType = MsgType.values()[buf.readInt()];
+        assertEquals(msgType, MsgType.TankJoin);
+
+        // 长度
+        final int length = buf.readInt();
+        assertEquals(length, 33);
+
+        // 消息体
         final int x = buf.readInt();
         final int y = buf.readInt();
         Dir dir = Dir.values()[buf.readInt()];
@@ -57,7 +69,10 @@ public class MsgCodecTest {
         ch.pipeline().addLast(new MsgDecoder());
 
         final ByteBuf buf = Unpooled.buffer();
-        buf.writeBytes(tankJoinMsg.toBytes());
+        buf.writeInt(MsgType.TankJoin.ordinal());
+        final byte[] bytes = tankJoinMsg.toBytes();
+        buf.writeInt(bytes.length);
+        buf.writeBytes(bytes);
 
         // 进站,bytes -> entity     decode反序列化
         ch.writeInbound(buf.duplicate());
@@ -69,5 +84,10 @@ public class MsgCodecTest {
         assertEquals(Group.GOOD, msg.getGroup());
         assertEquals(false, msg.isMoving());
         assertEquals(uuid, msg.getId());
+    }
+
+    @Test
+    public void testDateTimeStr() {
+        System.out.println(DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss.SSS"));
     }
 }

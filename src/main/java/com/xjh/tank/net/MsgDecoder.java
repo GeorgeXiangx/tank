@@ -1,13 +1,14 @@
 package com.xjh.tank.net;
 
-import com.xjh.tank.Dir;
-import com.xjh.tank.Group;
+import com.xjh.tank.net.msg.Msg;
+import com.xjh.tank.util.DateUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @Author: XJH
@@ -21,14 +22,25 @@ public class MsgDecoder extends ByteToMessageDecoder {
         // TCP拆包和粘包的问题
         if (in.readableBytes() < 8) return;
 
-        // 4+4+4+4+1+8+8 = 33
-        int x = in.readInt();
-        int y = in.readInt();
-        Dir dir = Dir.values()[in.readInt()];
-        Group group = Group.values()[in.readInt()];
-        boolean isMoving = in.readBoolean();
-        UUID uuid = new UUID(in.readLong(), in.readLong());
+        in.markReaderIndex();
 
-        out.add(new TankJoinMsg(x, y, dir, group, isMoving, uuid));
+        System.out.println(DateUtils.getDateTimeNow() + "-----MsgDecoder------" + ctx + " " + in.readableBytes());
+        final MsgType msgType = MsgType.values()[in.readInt()];
+        final int length = in.readInt();
+
+        if (in.readableBytes() < length) {
+            in.resetReaderIndex();
+            return;
+        }
+
+        final byte[] bytes = new byte[length];
+        in.readBytes(bytes);
+
+        Msg msg = null;
+        msg = (Msg) Class.forName("com.xjh.tank.net.msg." + msgType.toString() + "Msg").getDeclaredConstructor().newInstance();
+
+        msg.parse(bytes);
+        System.out.println(DateUtils.getDateTimeNow() + "------decode = " + msg);
+        out.add(msg);
     }
 }

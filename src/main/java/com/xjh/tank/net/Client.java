@@ -1,6 +1,9 @@
 package com.xjh.tank.net;
 
 import com.xjh.tank.TankFrame;
+import com.xjh.tank.net.msg.Msg;
+import com.xjh.tank.net.msg.TankJoinMsg;
+import com.xjh.tank.util.DateUtils;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -8,7 +11,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.ReferenceCountUtil;
 
 /**
  * @Author: XJH
@@ -57,8 +59,9 @@ public class Client {
     }
 
     public void send(Msg msg) {
-        final ByteBuf byteBuf = Unpooled.copiedBuffer(msg.toBytes());
-        channel.writeAndFlush(byteBuf);
+//        final ByteBuf byteBuf = Unpooled.copiedBuffer(msg.toBytes());
+        // 这里在加入自定义的对象的Encoder和Decoder后，直接发送相应对象，不需要再发送ByteBuf
+        channel.writeAndFlush(msg);
     }
 
     public void closeConnect() {
@@ -89,7 +92,7 @@ class ClientHandler extends SimpleChannelInboundHandler<Msg> {
      */
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Msg msg) throws Exception {
-        System.out.println(msg);
+        System.out.println(DateUtils.getDateTimeNow() + " client handler channelRead0 " + msg);
         msg.handle();
     }
 

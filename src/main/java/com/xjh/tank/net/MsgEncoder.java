@@ -1,5 +1,6 @@
 package com.xjh.tank.net;
 
+import com.xjh.tank.net.msg.Msg;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
@@ -9,16 +10,14 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @Date: 2022/12/21 4:11 下午
  * @Email: xiangjunhong@newhope.cn
  */
-public class MsgEncoder extends MessageToByteEncoder<TankJoinMsg> {
+public class MsgEncoder extends MessageToByteEncoder<Msg> {
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, TankJoinMsg msg, ByteBuf out) throws Exception {
-        out.writeInt(msg.x);
-        out.writeInt(msg.y);
-        out.writeInt(msg.getDir().ordinal());
-        out.writeInt(msg.getGroup().ordinal());
-        out.writeBoolean(msg.isMoving());
-        out.writeLong(msg.getId().getMostSignificantBits());
-        out.writeLong(msg.getId().getLeastSignificantBits());
+    protected void encode(ChannelHandlerContext ctx, Msg msg, ByteBuf out) throws Exception {
+        // 消息体：消息类型+消息长度+消息内容
+        out.writeInt(msg.getMsgType().ordinal());
+        final byte[] bytes = msg.toBytes();
+        out.writeInt(bytes.length);
+        out.writeBytes(bytes);
     }
 }

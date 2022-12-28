@@ -1,13 +1,14 @@
-package com.xjh.tank.net;
+package com.xjh.tank.net.msg;
 
 import com.xjh.tank.Dir;
 import com.xjh.tank.Group;
 import com.xjh.tank.Tank;
 import com.xjh.tank.TankFrame;
+import com.xjh.tank.net.Client;
+import com.xjh.tank.net.MsgType;
+import com.xjh.tank.util.DateUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -56,6 +57,27 @@ public class TankJoinMsg extends Msg {
                 ", moving=" + moving +
                 ", id=" + id +
                 '}';
+    }
+
+    @Override
+    public void parse(byte[] bytes) {
+        final DataInputStream dis = new DataInputStream(new ByteArrayInputStream(bytes));
+        try {
+            this.x = dis.readInt();
+            this.y = dis.readInt();
+            this.dir = Dir.values()[dis.readInt()];
+            this.group = Group.values()[dis.readInt()];
+            this.moving = dis.readBoolean();
+            this.id = new UUID(dis.readLong(), dis.readLong());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                dis.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -112,8 +134,16 @@ public class TankJoinMsg extends Msg {
         // 加入tank map
         final Tank tank = new Tank(this);
         TankFrame.INSTANCE.addTank(tank);
+        System.out.println(DateUtils.getDateTimeNow() + " 发送自己的tank : " + TankFrame.INSTANCE.getMyTank() + " 给其他client");
         // 将自己发送给其他client
-        Client.INSTANCE.send(new TankJoinMsg(TankFrame.INSTANCE.getMyTank()));
+        final TankJoinMsg tankJoinMsg = new TankJoinMsg(TankFrame.INSTANCE.getMyTank());
+        Client.INSTANCE.send(tankJoinMsg);
+        System.out.println(DateUtils.getDateTimeNow() + " TankJoinMsg : " + tankJoinMsg);
+    }
+
+    @Override
+    public MsgType getMsgType() {
+        return MsgType.TankJoin;
     }
 
     public Dir getDir() {

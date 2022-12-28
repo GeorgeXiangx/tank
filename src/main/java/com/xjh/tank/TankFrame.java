@@ -1,5 +1,8 @@
 package com.xjh.tank;
 
+import com.xjh.tank.net.Client;
+import com.xjh.tank.net.msg.TankStartMovingMsg;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -171,6 +174,9 @@ public class TankFrame extends Frame {
                 if (bU) myTank.setDir(Dir.UP);
                 if (bR) myTank.setDir(Dir.RIGHT);
                 if (bD) myTank.setDir(Dir.DOWN);
+
+                // 发送坦克移动的消息
+//                Client.INSTANCE.send(new TankStartMovingMsg(getMyTank()));
             }
         }
 
