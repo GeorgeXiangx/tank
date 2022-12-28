@@ -176,7 +176,7 @@ public class TankFrame extends Frame {
                 if (bD) myTank.setDir(Dir.DOWN);
 
                 // 发送坦克移动的消息
-//                Client.INSTANCE.send(new TankStartMovingMsg(getMyTank()));
+                Client.INSTANCE.send(new TankStartMovingMsg(getMyTank()));
             }
         }
 
