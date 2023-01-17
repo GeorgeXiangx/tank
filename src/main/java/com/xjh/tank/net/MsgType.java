@@ -6,5 +6,7 @@ package com.xjh.tank.net;
  * @Email: xiangjunhong@newhope.cn
  */
 public enum MsgType {
-    TankJoin, TankStartMoving, TANK_DIE, FIRE_BULLET
+    TankJoin, TankStartMoving, TankStopMoving, TankDirChanged, TANK_DIE, FIRE_BULLET
 }
+
+// TCP Nagle算法

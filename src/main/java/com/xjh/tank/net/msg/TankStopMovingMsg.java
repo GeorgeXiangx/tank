@@ -1,10 +1,8 @@
 package com.xjh.tank.net.msg;
 
 import com.xjh.tank.Dir;
-import com.xjh.tank.Group;
 import com.xjh.tank.Tank;
 import com.xjh.tank.TankFrame;
-import com.xjh.tank.net.Client;
 import com.xjh.tank.net.MsgType;
 
 import java.io.*;
@@ -16,33 +14,33 @@ import java.util.UUID;
  * @Date: 2022/12/21 4:10 下午
  * @Email: xiangjunhong@newhope.cn
  */
-public class TankStartMovingMsg extends Msg {
+public class TankStopMovingMsg extends Msg {
 
     public int x, y;
     private Dir dir;
     private UUID id;
 
-    public TankStartMovingMsg(int x, int y, Dir dir, UUID id) {
+    public TankStopMovingMsg(int x, int y, Dir dir, UUID id) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.id = id;
     }
 
-    public TankStartMovingMsg(Tank tank) {
+    public TankStopMovingMsg(Tank tank) {
         this.x = tank.getX();
         this.y = tank.getY();
         this.dir = tank.getDir();
         this.id = tank.getId();
     }
 
-    public TankStartMovingMsg() {
+    public TankStopMovingMsg() {
 
     }
 
     @Override
     public String toString() {
-        return "TankStartMovingMsg{" +
+        return "TankStopMovingMsg{" +
                 "x=" + x +
                 ", y=" + y +
                 ", dir=" + dir +
@@ -113,15 +111,14 @@ public class TankStartMovingMsg extends Msg {
      */
     @Override
     public void handle() {
-        // 判断此消息是不是由自己发出，是则略过，否则需要将新加入的坦克绘制到Frame上，并且要报告给server上其他的client自己的tank的位置
         if (this.id.equals(TankFrame.INSTANCE.getMyTank().getId())) {
             return;
         }
 
         Tank t = TankFrame.INSTANCE.getTankByUUID(this.id);
         if (Objects.nonNull(t)) {
-            // 坦克移动
-            t.setMoving(true);
+            // 坦克停止移动
+            t.setMoving(false);
             t.setX(this.x);
             t.setY(this.y);
             t.setDir(this.dir);
@@ -130,7 +127,7 @@ public class TankStartMovingMsg extends Msg {
 
     @Override
     public MsgType getMsgType() {
-        return MsgType.TankStartMoving;
+        return MsgType.TankStopMoving;
     }
 
     public Dir getDir() {

@@ -1,7 +1,9 @@
 package com.xjh.tank;
 
 import com.xjh.tank.net.Client;
+import com.xjh.tank.net.msg.TankDirChangedMsg;
 import com.xjh.tank.net.msg.TankStartMovingMsg;
+import com.xjh.tank.net.msg.TankStopMovingMsg;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -165,18 +167,37 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            if (!bL && !bR && !bU && !bD) {
+            if (!bL && !bR && !bU && !bD) {// 停止
                 myTank.setMoving(false);
-            } else {
+                // 发送坦克停止移动的消息
+                Client.INSTANCE.send(new TankStopMovingMsg(getMyTank()));
+            } else {// 移动
+                if (bL) {
+                    myTank.setDir(Dir.LEFT);
+                }
+                if (bU) {
+                    myTank.setDir(Dir.UP);
+                }
+                if (bR) {
+                    myTank.setDir(Dir.RIGHT);
+                }
+                if (bD) {
+                    myTank.setDir(Dir.DOWN);
+                }
+
+                // 坦克一直在移动则不用重复发送移动的消息
+                if (!myTank.isMoving())
+                    // 发送坦克移动的消息
+                    Client.INSTANCE.send(new TankStartMovingMsg(getMyTank()));
+
+                // 判断两次方向是否一致
+                if (myTank.getDir() != null &&
+                        !myTank.getDir().equals(myTank.getPreDir())) {
+                    Client.INSTANCE.send(new TankDirChangedMsg(getMyTank()));
+                }
+                myTank.setPreDir(myTank.getDir());
                 myTank.setMoving(true);
 
-                if (bL) myTank.setDir(Dir.LEFT);
-                if (bU) myTank.setDir(Dir.UP);
-                if (bR) myTank.setDir(Dir.RIGHT);
-                if (bD) myTank.setDir(Dir.DOWN);
-
-                // 发送坦克移动的消息
-                Client.INSTANCE.send(new TankStartMovingMsg(getMyTank()));
             }
         }
 

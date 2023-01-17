@@ -3,10 +3,7 @@ package com.xjh.tank.net;
 import com.xjh.tank.util.DateUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelInitializer;
+import io.netty.channel.*;
 import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -30,6 +27,8 @@ public class Server {
         try {
             final ChannelFuture future = b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
+                    // 禁用Nagle算法，保证消息的实时性
+                    .option(ChannelOption.TCP_NODELAY, Boolean.TRUE)
                     .childHandler(new ChannelInitializer<SocketChannel>() {
 
                         @Override

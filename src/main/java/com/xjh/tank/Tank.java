@@ -15,6 +15,7 @@ public class Tank {
 
     private int x = 200, y = 200;
     private Dir dir = Dir.DOWN;
+    private Dir preDir;
     private static final int SPEED = 5;
     private boolean isMoving = false;
     private TankFrame tf = null;
@@ -210,5 +211,13 @@ public class Tank {
 
     public void setDir(Dir dir) {
         this.dir = dir;
+    }
+
+    public Dir getPreDir() {
+        return preDir;
+    }
+
+    public void setPreDir(Dir preDir) {
+        this.preDir = preDir;
     }
 }
